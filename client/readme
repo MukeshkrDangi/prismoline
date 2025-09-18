@@ -1,0 +1,21 @@
+// import ProductsSection from "../components/ProductsSection";
+
+
+
+
+
+// {
+//   "compilerOptions": {
+//     "baseUrl": "src",
+//     "paths": {
+//       "@/*": ["*"]
+//     }
+//   }
+// }
+
+
+// src/
+//   components/
+//     ProductsSection.tsx
+//     CertificatesAwardsSection.tsx
+//     Testimonials.tsx
