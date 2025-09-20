@@ -25,8 +25,8 @@ RUN npm run build
 # ---------------------------
 # STEP 3: Expose ports
 # ---------------------------
-EXPOSE 5000  # server
-EXPOSE 3000  # client
+EXPOSE 5000  
+EXPOSE 3000  
 
 # ---------------------------
 # STEP 4: Start both server & client
