@@ -5,26 +5,31 @@ FROM node:20-alpine
 WORKDIR /app
 
 # ---------------------------
-# STEP 1: Build server
+# STEP 1: Install server dependencies
 # ---------------------------
 COPY server/package*.json ./server/
 WORKDIR /app/server
 RUN npm install
 COPY server .
-EXPOSE 5000
 
 # ---------------------------
-# STEP 2: Build client
+# STEP 2: Install client dependencies & build
 # ---------------------------
-COPY client/package*.json ./client/
+COPY client/package*.json ./  # <- copy directly into /app
+WORKDIR /app
+RUN mkdir client && cp package*.json client/ && cd client && npm install
+COPY client ./client
 WORKDIR /app/client
-RUN npm install
-COPY client .
 RUN npm run build
-EXPOSE 3000
 
 # ---------------------------
-# STEP 3: Start both apps
+# STEP 3: Expose ports
+# ---------------------------
+EXPOSE 5000  # server
+EXPOSE 3000  # client
+
+# ---------------------------
+# STEP 4: Start both server & client
 # ---------------------------
 CMD sh -c "cd /app/server && npm start & cd /app/client && npm start"
 
