@@ -1,46 +1,36 @@
-# Use Node 20 Alpine
-FROM node:20-alpine
+# Use Node 20
+FROM node:20
 
-# Set working directory
+# Set root workdir
 WORKDIR /app
 
 # ---------------------------
-# STEP 1: Install server dependencies
+# STEP 1: Server
 # ---------------------------
-# Copy server package files
 COPY server/package*.json ./server/
 WORKDIR /app/server
 RUN npm install
-
-# Copy full server code
 COPY server .
 
 # ---------------------------
-# STEP 2: Install client dependencies & build
+# STEP 2: Client
 # ---------------------------
-# Set workdir to root
-WORKDIR /app
-
-# Copy client package files
 COPY client/package*.json ./client/
 WORKDIR /app/client
 RUN npm install
-
-# Copy full client code
 COPY client .
-
-# Build client
 RUN npm run build
 
 # ---------------------------
 # STEP 3: Expose ports
 # ---------------------------
-EXPOSE 5000
-EXPOSE 3000
+EXPOSE 5000 3000
 
 # ---------------------------
-# STEP 4: Start server & client
+# STEP 4: Use concurrently to start both
 # ---------------------------
-# Use sh -c to run both processes
-CMD sh -c "cd /app/server && npm start & cd /app/client && npm start"
+RUN npm install -g concurrently
+WORKDIR /app
+CMD ["concurrently", "--kill-others", "npm:start --prefix server", "npm:start --prefix client"]
+
 
